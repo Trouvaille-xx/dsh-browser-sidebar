@@ -1,0 +1,22 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Extension unit tests (133)
+        run: node --test extension/test/*.test.mjs
+      - name: Sidecar plugin unit tests (51)
+        run: node --test packages/dsh-browser-sidecar/test/*.test.js
