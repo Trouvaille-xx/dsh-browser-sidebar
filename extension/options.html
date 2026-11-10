@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DSH 浏览器侧边栏 · 设置</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main class="wrap">
+    <header class="head">
+      <h1>DSH 浏览器侧边栏</h1>
+      <p class="sub">把当前网页的正文、选中文本与视频字幕同步给 DeepSeek Harness 的 agent。</p>
+      <p class="version">版本 <span id="version">—</span></p>
+    </header>
+
+    <section class="card">
+      <h2>Bridge 连接</h2>
+      <label class="field">
+        <span class="label">Bridge 地址</span>
+        <input id="bridgeUrl" type="text" spellcheck="false" autocomplete="off" placeholder="http://127.0.0.1:41789">
+      </label>
+      <p class="hint">默认 <code>http://127.0.0.1:41789</code>（dsh-browser-sidecar 插件的 bridge 端口）。只填主机名时会自动补 <code>http://</code> 和 41789 端口。</p>
+
+      <div class="row">
+        <button id="btnTest" class="btn" type="button">测试连接</button>
+        <span id="testStatus" class="test-status" data-kind="idle">未测试</span>
+      </div>
+      <pre id="testDetail" class="detail" hidden></pre>
+    </section>
+
+    <section class="card">
+      <h2>同步行为</h2>
+      <label class="check">
+        <input id="autoSync" type="checkbox">
+        <span>自动同步当前页（切标签页 / SPA 路由变化 / 内容变化后自动推送）</span>
+      </label>
+
+      <label class="field inline">
+        <span class="label">节流间隔</span>
+        <select id="throttleMs">
+          <option value="1000">1.0 秒</option>
+          <option value="1500">1.5 秒（默认）</option>
+          <option value="3000">3.0 秒</option>
+          <option value="5000">5.0 秒</option>
+        </select>
+      </label>
+      <p class="hint">内容变化后会等待该间隔再上报，避免滚动/动态广告导致频繁推送。</p>
+    </section>
+
+    <section class="card">
+      <h2>采集上限</h2>
+      <div class="grid">
+        <label class="field inline">
+          <span class="label">正文上限</span>
+          <select id="maxContentChars">
+            <option value="30000">30000 字符</option>
+            <option value="60000">60000 字符（规格默认）</option>
+            <option value="120000">120000 字符</option>
+          </select>
+        </label>
+
+        <label class="field inline">
+          <span class="label">字幕条数上限</span>
+          <select id="maxTranscriptItems">
+            <option value="2000">2000 条</option>
+            <option value="5000">5000 条（规格默认）</option>
+            <option value="10000">10000 条</option>
+          </select>
+        </label>
+
+        <label class="field inline">
+          <span class="label">字幕字符上限</span>
+          <select id="maxTranscriptChars">
+            <option value="40000">40000 字符</option>
+            <option value="80000">80000 字符（规格默认）</option>
+            <option value="160000">160000 字符</option>
+          </select>
+        </label>
+      </div>
+      <p class="hint">超过上限的内容会被截断并标记 <code>truncated: true</code>，不会丢弃整段内容。</p>
+    </section>
+
+    <section class="card">
+      <h2>隐私说明</h2>
+      <ul class="privacy">
+        <li>只读取<b>当前活动标签页</b>；后台标签页不会抽取，也不会定时抓取。</li>
+        <li>不读取 <code>input</code>/<code>textarea</code>/<code>select</code> 的值，不采集密码框、表单内容。</li>
+        <li>顶层文档：不读取跨域 iframe 内部内容；<code>chrome://</code> 与扩展页面直接跳过。</li>
+        <li>数据只发送到你配置的本机 bridge（<code>127.0.0.1</code>），扩展不做任何第三方上报。</li>
+      </ul>
+    </section>
+
+    <div class="actions">
+      <button id="btnSave" class="btn primary" type="button">保存设置</button>
+      <button id="btnReset" class="btn" type="button">恢复默认</button>
+      <span id="saveStatus" class="save-status" data-kind="idle"></span>
+    </div>
+  </main>
+
+  <script src="lib/core.js"></script>
+  <script src="lib/net.js"></script>
+  <script type="module" src="options.js"></script>
+</body>
+</html>

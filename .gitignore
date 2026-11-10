@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+pnpm-lock.yaml
+
+# build / package outputs
+dist/
+*.zip
+*.crx
+*.pem
+
+# local dev scratch
+.tmp/
+.tmp-*/
+.dsh-test/
+.scratch/
+*.log
+
+# profile backups produced by scripts/install-sidecar.mjs
+.sidecar-backup-*/
+RESTORE.md
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini

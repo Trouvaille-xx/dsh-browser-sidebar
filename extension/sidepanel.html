@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DSH 侧边栏</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <!-- 顶部工具条：固定 40px（Chrome side panel 默认宽度约 320–500px，必须窄屏可用） -->
+  <header class="toolbar">
+    <div class="status" id="status" title="bridge 连接状态">
+      <span class="dot" id="statusDot" data-status="unknown"></span>
+      <span class="status-label" id="statusLabel">未检测</span>
+    </div>
+
+    <button class="tb-btn" id="btnSync" type="button" title="读取当前页并同步到 DSH">
+      <span class="ico" aria-hidden="true">⟳</span><span class="label">读取当前页</span>
+    </button>
+
+    <label class="switch" title="自动同步（切页/内容变化时自动推送）">
+      <input type="checkbox" id="autoSync" aria-label="自动同步">
+      <span class="slider" aria-hidden="true"></span>
+    </label>
+
+    <span class="spacer"></span>
+
+    <button class="tb-btn icon-only" id="btnOpen" type="button" title="在新标签页打开 DSH">
+      <span class="ico" aria-hidden="true">↗</span>
+    </button>
+    <button class="tb-btn icon-only" id="btnOptions" type="button" title="设置">
+      <span class="ico" aria-hidden="true">⚙</span>
+    </button>
+  </header>
+
+  <!--
+    「当前页面」状态条（固定 30px，不挤压 iframe）：
+    - tone=ok    绿色：已同步（含 N 秒前）
+    - tone=idle  灰色：尚未读取 / 无法读取
+    - tone=warn  黄色：当前活动页与最后一次快照不是同一页 → 明确告诉用户 agent 看到的是旧页，并给一键同步
+  -->
+  <div class="pagebar" id="pagebar" data-tone="idle" title="">
+    <span class="pagebar-icon" id="pagebarIcon" aria-hidden="true">🌐</span>
+    <span class="pagebar-title" id="pagebarTitle">当前页面</span>
+    <span class="pagebar-host" id="pagebarHost"></span>
+    <span class="pagebar-status" id="pagebarStatus"></span>
+    <button class="pagebar-sync" id="btnSyncCurrent" type="button" hidden>同步当前页</button>
+  </div>
+
+  <main class="stage">
+    <!--
+      iframe 指向 bridge 代理源（默认 http://127.0.0.1:41789/），DSH UI 的所有 /api/* 与 WebSocket
+      都同源发往代理，由代理注入鉴权 → 浏览器侧不需要任何 cookie 技巧。
+      referrerpolicy="no-referrer"：不把 chrome-extension:// 来源泄露给 bridge。
+    -->
+    <iframe
+      id="bridgeFrame"
+      title="DeepSeek Harness"
+      referrerpolicy="no-referrer"
+      allow="clipboard-read; clipboard-write; fullscreen"
+      hidden
+    ></iframe>
+
+    <div class="loading" id="loading">
+      <span class="spinner" aria-hidden="true"></span>
+      <span>正在连接 DSH…</span>
+    </div>
+
+    <!-- bridge 不可达时的引导卡片 -->
+    <section class="guide" id="guideCard" hidden>
+      <h1>未连接到 DSH bridge</h1>
+      <p class="guide-sub" id="guideReason">请确认本机 DSH 与 bridge 插件已启动。</p>
+
+      <div class="endpoint">
+        <code id="bridgeAddr">http://127.0.0.1:41789</code>
+      </div>
+
+      <ol class="steps">
+        <li>启动 DSH（桌面端直接打开，或终端运行 <code>dsh web --port 4064</code>）。</li>
+        <li>安装并启用 <code>dsh-browser-sidecar</code> 插件，bridge 监听 <code>127.0.0.1:41789</code>。</li>
+        <li>浏览器打开 <code id="healthLink">http://127.0.0.1:41789/__bridge/health</code>，应返回 JSON。</li>
+      </ol>
+
+      <div class="guide-actions">
+        <button class="btn primary" id="btnRetry" type="button">重试连接</button>
+        <button class="btn" id="btnGuideOptions" type="button">打开设置</button>
+      </div>
+      <p class="guide-hint">端口可在扩展设置里修改；DSH UI 会在连接成功后自动加载。</p>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" hidden role="status"></div>
+
+  <!-- 经典脚本先加载共享纯函数 / 网络工具，页面逻辑用 ES module -->
+  <script src="lib/core.js"></script>
+  <script src="lib/net.js"></script>
+  <script type="module" src="sidepanel.js"></script>
+</body>
+</html>

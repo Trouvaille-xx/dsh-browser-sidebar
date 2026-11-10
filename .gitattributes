@@ -1,0 +1,8 @@
+# Normalize line endings in the repo (checkout keeps LF; Windows editors may use CRLF)
+* text=auto eol=lf
+
+# Binary-ish artifacts never get line-ending treatment
+*.png binary
+*.pem binary
+*.crx binary
+*.zip binary

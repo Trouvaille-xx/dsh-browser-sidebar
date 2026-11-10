@@ -1,0 +1,43 @@
+{
+  "name": "dsh-browser-sidecar",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "浏览器侧边栏 bridge: loopback reverse proxy for the DSH Web UI (authentication injected server-side) plus a /__bridge context API, the browser_page tool and a short system-prompt section.",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./core": "./core.js",
+    "./context-store": "./context-store.js",
+    "./bridge": "./bridge.js",
+    "./proxy": "./proxy.js",
+    "./tools": "./tools.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "core.js",
+    "context-store.js",
+    "bridge.js",
+    "proxy.js",
+    "tools.js",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "browser",
+    "chrome-sidebar",
+    "bridge",
+    "reverse-proxy"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

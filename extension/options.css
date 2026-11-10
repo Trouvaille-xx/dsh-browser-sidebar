@@ -1,0 +1,204 @@
+/*!
+ * DSH 浏览器侧边栏扩展 · 设置页样式
+ * 与 side panel 同一套 CSS 变量与系统字体栈，深色/浅色跟随系统。
+ */
+
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --bg-soft: #f6f7f9;
+  --fg: #1b1d21;
+  --fg-muted: #62687a;
+  --border: #e3e5ea;
+  --accent: #5b5bd6;
+  --accent-fg: #ffffff;
+  --ok: #1fa463;
+  --warn: #d08a12;
+  --err: #d94b4b;
+  --radius: 10px;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Noto Sans CJK SC", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #101114;
+    --bg-soft: #17191d;
+    --fg: #e7e8ea;
+    --fg-muted: #9aa0ac;
+    --border: #2a2d34;
+    --accent: #8b8bf0;
+    --accent-fg: #14141c;
+    --ok: #3ddc97;
+    --warn: #f0b526;
+    --err: #ff6b6b;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 28px 20px 60px;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.wrap { max-width: 720px; margin: 0 auto; }
+
+.head { margin-bottom: 18px; }
+.head h1 { margin: 0 0 6px; font-size: 20px; font-weight: 600; }
+.head .sub { margin: 0; color: var(--fg-muted); font-size: 13px; }
+.head .version { margin: 6px 0 0; color: var(--fg-muted); font-size: 12px; }
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+}
+
+.card h2 {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+
+.field.inline {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.field .label { font-size: 13px; color: var(--fg); }
+
+input[type="text"],
+select {
+  height: 32px;
+  padding: 0 9px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: inherit;
+  font-size: 13px;
+  min-width: 0;
+}
+
+input[type="text"] { font-family: var(--mono); }
+
+input[type="text"]:focus,
+select:focus {
+  outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+.hint { margin: 8px 0 0; color: var(--fg-muted); font-size: 12px; }
+.hint code, .privacy code {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0 3px;
+}
+
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.check input { margin-top: 3px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 4px 18px;
+}
+
+.grid .field.inline { margin-top: 8px; }
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn {
+  height: 32px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn:hover:not([disabled]) { border-color: var(--accent); }
+.btn[disabled] { opacity: 0.6; cursor: progress; }
+
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+  font-weight: 600;
+}
+
+.btn.primary:hover:not([disabled]) { filter: brightness(1.06); }
+
+.test-status { font-size: 12.5px; color: var(--fg-muted); }
+.test-status[data-kind="ok"] { color: var(--ok); }
+.test-status[data-kind="warn"] { color: var(--warn); }
+.test-status[data-kind="error"] { color: var(--err); }
+
+.detail {
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 240px;
+  overflow: auto;
+}
+
+.privacy {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--fg-muted);
+  font-size: 12.5px;
+}
+
+.privacy li { margin-bottom: 6px; }
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.save-status { font-size: 12.5px; color: var(--fg-muted); }
+.save-status[data-kind="ok"] { color: var(--ok); }
+.save-status[data-kind="error"] { color: var(--err); }

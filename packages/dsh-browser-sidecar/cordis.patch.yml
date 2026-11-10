@@ -1,0 +1,18 @@
+# dsh-browser-sidecar bundle patch.
+#
+# One Host row owns everything the Chrome side panel needs:
+#   - the loopback reverse proxy (HTTP + WebSocket) that lets an iframe load the
+#     official DSH Web UI without any browser cookie tricks,
+#   - the /__bridge/* context API the extension pushes page snapshots to,
+#   - the `browser_page` agent tool,
+#   - a <= 5 line system-prompt section telling the agent when to use it.
+#
+# There is no Client half: the side panel ships in the Chrome extension, not in
+# the DSH browser plugin list.
+- insert:
+    - id: browser-sidecar
+      name: dsh-browser-sidecar
+      config:
+        port: 41789          # sidecar listen port (127.0.0.1 only)
+        # upstreamPort: 0    # 0/省略 = 自动从宿主 webServer.port 发现（Desktop 用 --port 0，端口每次启动随机）
+        #                    # 设成非 0 数字 = 固定上游端口（钉死后不再自动发现）
