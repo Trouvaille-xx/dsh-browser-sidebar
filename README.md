@@ -6,7 +6,7 @@
 
 [![Chrome](https://img.shields.io/badge/Chrome-%E2%89%A5116-4285F4?logo=googlechrome&logoColor=white)](#)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![tests](https://img.shields.io/badge/tests-133%20extension%20%2B%2051%20plugin-brightgreen.svg)](#开发与测试)
+[![tests](https://github.com/Trouvaille-xx/dsh-browser-sidebar/actions/workflows/tests.yml/badge.svg)](https://github.com/Trouvaille-xx/dsh-browser-sidebar/actions/workflows/tests.yml)
 
 ![侧边栏里的 DSH UI + 当前页面状态条](docs/screenshots/sidebar-pagebar-ok.png)
 
